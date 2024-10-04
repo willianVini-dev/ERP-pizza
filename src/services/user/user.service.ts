@@ -1,9 +1,14 @@
+import { User } from "@prisma/client";
 import prisma from "../../DB/index"
-import {hash} from "bcryptjs"
+import { hash } from "bcryptjs"
 interface UserCreate {
 	name: string;
 	email: string;
 	password: string;
+}
+interface DetailsUser {
+	name: string;
+	email: string;
 }
 
 const createService = async ({ ...data }: UserCreate): Promise<any> => {
@@ -14,7 +19,7 @@ const createService = async ({ ...data }: UserCreate): Promise<any> => {
 			throw new Error("User alread exists")
 
 		data.password = await hash(data.password, 8)
-		return prisma.user.create({ data,select:{id:true} })
+		return prisma.user.create({ data, select: { id: true } })
 
 	} catch (err: unknown) {
 		throw new Error
@@ -22,4 +27,12 @@ const createService = async ({ ...data }: UserCreate): Promise<any> => {
 
 }
 
-export { createService }
+const detailsUserService = async (id: string): Promise<DetailsUser> => {
+	try {
+		return prisma.user.findUnique({ where: { id }, select: { name: true, email: true } })
+	} catch (error) {
+		throw new Error
+	}
+}
+
+export { createService,detailsUserService}
