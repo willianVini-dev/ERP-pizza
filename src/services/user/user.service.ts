@@ -1,5 +1,5 @@
 import prisma from "../../DB/index"
-
+import {hash} from "bcryptjs"
 interface UserCreate {
 	name: string;
 	email: string;
@@ -13,7 +13,8 @@ const createService = async ({ ...data }: UserCreate): Promise<any> => {
 		if (userExists)
 			throw new Error("User alread exists")
 
-		await prisma.user.create({ data })
+		data.password = await hash(data.password, 8)
+		return prisma.user.create({ data,select:{id:true} })
 
 	} catch (err: unknown) {
 		throw new Error
