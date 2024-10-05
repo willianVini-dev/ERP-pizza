@@ -1,6 +1,5 @@
 import { Request,Response } from 'express';
 import {createService,findAllCategoryService} from "../../services/category/category.service"
-import { Category } from '@prisma/client';
 
 
 const create = async(req:Request, res:Response)=>{
@@ -16,7 +15,7 @@ const create = async(req:Request, res:Response)=>{
 const findAll = async(req:Request, res:Response)=>{
   try {
     const categories = await findAllCategoryService()
-    res.send(200).json({category:categories})
+    res.status(200).json({category:categories})
   } catch (error) {
     res.status(500).send("Error find categories")
   }
