@@ -6,6 +6,10 @@ interface ItemRequest {
   product_id: string;
   amount: number
 }
+interface ItemDeleteRequest {
+  id: string;
+
+}
 
 const createService = async ({ order_id, product_id, amount }: ItemRequest): Promise<Item> => {
   try {
@@ -20,7 +24,18 @@ const createService = async ({ order_id, product_id, amount }: ItemRequest): Pro
     throw new Error(error.message)
   }
 }
+const removeService = async ({ id }: ItemDeleteRequest): Promise<Item> => {
+  try {
+    return prisma.item.delete({
+      where: {
+        id
+      }
+    })
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
 
 
 
-export { createService }
+export { createService, removeService }

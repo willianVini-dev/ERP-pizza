@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { createService } from "../../services/items/items.service"
+import { createService,removeService } from "../../services/items/items.service"
 
 const create = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -10,6 +10,15 @@ const create = async (req: Request, res: Response): Promise<any> => {
     res.status(400).json(error)
   }
 }
+const remove = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { id } = req.params
+    const item = await removeService({ id })
+    return res.status(200).json(item)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}
 
 
-export { create }
+export { create,remove }
